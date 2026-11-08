@@ -1,0 +1,19 @@
+<mat-card appearance="outlined" class="card1 mat-elevation-z6">
+  <mat-card-title>Historie objednávek</mat-card-title>
+  <mat-card-content>
+    @if (emptyState) {
+      <div class="emptyState">Žádné objednávky</div>
+    } @else {
+      <div class="orders-container">
+        @for (order of orders; track order.publicId) {
+          <div class="table-container lab-order">
+            <div class="lab-order-id">{{ order.publicId }}</div>
+            <div class="lab-order-status">{{ order.status }}</div>
+            <div class="lab-order-total">{{ order.total }}</div>
+            <div class="lab-order-paid">{{ order.paidAmount }}</div>
+          </div>
+        }
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

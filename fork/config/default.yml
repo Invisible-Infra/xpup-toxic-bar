@@ -1,0 +1,511 @@
+server:
+  port: 3000
+  basePath: ''
+  baseUrl: 'http://localhost:3000' # used for CSAF, e.g. https://example.com
+application:
+  domain: lab.test # XPUP-LAB fixture domain
+  name: 'Toxic Bar'
+  logo: JuiceShop_Logo.png
+  favicon: favicon_js.ico
+  theme: bluegrey-lightgreen # Options: bluegrey-lightgreen blue-lightblue deeppurple-amber indigo-pink pink-bluegrey purple-green deeporange-indigo lime-green neon-fire
+  showVersionNumber: false
+  showGitHubLinks: false
+  localBackupEnabled: false
+  numberOfRandomFakeUsers: 0
+  altcoinName: Juicycoin
+  privacyContactEmail: privacy@lab.test
+  customMetricsPrefix: xpuplab
+  organizer:
+    name: 'Digitální sebeobrana'
+    url: 'https://www.digitalnisebeobrana.cz'
+    logo: digitalni-sebeobrana-logo.png
+  chatBot:
+    name: 'Lab Assistant'
+    avatar: 'JuicyChatBot.png'
+    model: ~
+    llmApiUrl: ~
+    llmMaxRetries: 0
+    sampleQuestions: []
+  social:
+    blueSkyUrl: ~
+    mastodonUrl: ~
+    twitterUrl: ~
+    facebookUrl: ~
+    slackUrl: ~
+    redditUrl: ~
+    pressKitUrl: 'https://www.digitalnisebeobrana.cz'
+    nftUrl: ~
+    questionnaireUrl: ~
+  recyclePage:
+    topProductImage: fruit_press.jpg
+    bottomProductImage: apple_pressings.jpg
+  welcomeBanner:
+    showOnFirstStart: true
+    title: 'Welcome to Toxic Bar'
+    message: "<p class='xpup-welcome-logo'><a href='https://www.digitalnisebeobrana.cz' target='_blank' rel='noopener noreferrer'><img src='assets/public/images/digitalni-sebeobrana-logo.png' alt='Digitální sebeobrana'/></a></p><p><strong>Toxic Bar</strong> — Questionable drinks for questionable times.</p><p>Hydration for the end of the network. Salvaged ingredients, unstable recipes, black-market classics and a few things nobody has officially declared safe.</p><p>This is your private training e-shop (L1–L9) by <a href='https://www.digitalnisebeobrana.cz' target='_blank' rel='noopener noreferrer'><strong>Digitální sebeobrana</strong></a>. It intentionally contains vulnerabilities for practice only. Stay inside this instance — do not target other systems or the open Internet.</p><p>Sign in with the lab accounts from your instance materials (for example <code>a@lab.test</code>).</p><p class='xpup-upstream-note'>Based on a customized fork of <a href='https://owasp-juice.shop' target='_blank' rel='noopener noreferrer'><strong>OWASP Juice Shop</strong></a> (MIT), an open-source project of the <a href='https://owasp.org' target='_blank' rel='noopener noreferrer'>Open Worldwide Application Security Project</a>.</p>"
+  cookieConsent:
+    message: 'This training shop uses cookies for your basket and session.'
+    dismissText: 'OK'
+    linkText: 'Privacy policy'
+    linkUrl: '/#/privacy-security/privacy-policy'
+  securityTxt:
+    contact: 'mailto:privacy@lab.test'
+    encryption: ~
+    acknowledgements: ~
+    hiring: ~
+    csaf: '/.well-known/csaf/provider-metadata.json' # scheme,host,port taken from baseUrl
+  promotion:
+    video: owasp_promo.mp4
+    subtitles: owasp_promo.vtt
+  easterEggPlanet:
+    name: Orangeuze
+    overlayMap: orangemap2k.avif
+  googleOauth:
+    clientId: ~
+    authorizedRedirects: []
+challenges:
+  showSolvedNotifications: false # XPUP-LAB
+  showHints: false # XPUP-LAB
+  showMitigations: false # XPUP-LAB
+  codingChallengesEnabled: never # XPUP-LAB
+  restrictToTutorialsFirst: false
+  overwriteUrlForProductTamperingChallenge: 'https://owasp.slack.com'
+  overwriteUrlForCsrfChallenge: 'http://htmledit.squarefree.com'
+  xssBonusPayload: '<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/771984076&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>'
+  safetyMode: auto # Options: enabled disabled auto
+  csafHashValue: 7e7ce7c65db3bf0625fcea4573d25cff41f2f7e3474f2c74334b14fc65bb4fd26af802ad17a3a03bf0eee6827a00fb8f7905f338c31b5e6ea9cb31620242e843
+  metricsIgnoredUserAgents:
+    - 'Prometheus'
+    - 'Alloy'
+    - 'promscrape'
+    - 'otelcol'
+hackingInstructor:
+  isEnabled: false # XPUP-LAB
+  avatarImage: JuicyBot.png
+  hintPlaybackSpeed: normal # Options: faster fast normal slow slower
+products:
+  -
+    name: 'Core Coolant — Apple / 1L'
+    price: 1.99
+    deluxePrice: 0.99
+    limitPerUser: 5
+    description: 'Old-world apple concentrate cut with filtered bunker water. Stable, familiar, and only faintly radioactive according to the label.'
+    image: apple_juice.jpg
+    reviews:
+      - { text: 'One of my favorites!', author: admin }
+      - { text: "Great! We'll have an apple party. Everyone brings an apple and - STUFFS IT DOWN EACH OTHER'S THROAT!", author: basil }
+  -
+    name: 'Sunburn — Orange / 1L'
+    description: 'Bright citrus recovered from the southern greenhouse belts. Sharp enough to wake you after a night shift in Sector 9.'
+    price: 2.99
+    deluxePrice: 2.49
+    image: orange_juice.jpg
+    reviews:
+      - { text: 'y0ur f1r3wall needs m0r3 musc13', author: uvogin }
+  -
+    name: 'Xeno Nectar / 500ml'
+    description: 'Nobody at the bar can identify the fruit. Nobody who tried it has complained twice.'
+    price: 8.99
+    image: eggfruit_juice.jpg
+    reviews:
+      - { text: 'I bought it, would buy again. 5/7', author: admin }
+  -
+    name: 'Raspberry Piña Crash / 1L'
+    description: 'Raspberry, sugar, water and an irresponsible amount of compute. May boot before serving.'
+    price: 4.99
+    image: raspberry_juice.jpg
+  -
+    name: 'Acid Patch — Lemon / 500ml'
+    description: 'Aggressively sour citrus with enough vitamin C to survive another maintenance window.'
+    price: 2.99
+    deluxePrice: 1.99
+    limitPerUser: 5
+    image: lemon_juice.jpg
+  -
+    name: 'Yellowcake Smoothfuel / 1L'
+    description: 'Thick banana fuel for humans, scavengers and other primates. Despite the name, no uranium is listed in the ingredients.'
+    price: 1.99
+    image: banana_juice.jpg
+    reviews:
+      - { text: 'Fry liked it too.', author: bender }
+  -
+    name: 'Toxic Bar Crew Shirt'
+    description: 'Standard issue for bartenders, runners and people who know which alley entrance stays unlocked after curfew.'
+    price: 22.49
+    limitPerUser: 5
+    image: fan_shirt.jpg
+  -
+    name: 'Toxic Bar Runner Shirt'
+    description: 'Fitted fieldwear for rooftop couriers, terminal divers and anyone moving faster than the checkpoint scanners.'
+    price: 22.49
+    image: fan_girlie.jpg
+  -
+    name: 'TLS Distiller'
+    description: 'A battered diagnostic rig for inspecting certificates, cipher suites and encrypted links before you trust anything coming through the wire.'
+    price: 0.01
+    image: orange_juice.jpg
+    urlForProductTamperingChallenge: 'https://www.owasp.org/index.php/O-Saft'
+  -
+    name: 'Dead Drop Crate — Holiday ''14'
+    description: 'Ten unidentified 500ml bottles and one piece of bar merch sealed in an old logistics crate. Contents may vary. Provenance definitely does.'
+    price: 29.99
+    image: undefined.jpg
+    useForChristmasSpecialChallenge: true
+  -
+    name: 'Restricted Elixir #7'
+    description: 'A black-market blend of rare greenhouse fruit, undocumented extracts and several ingredients the city registry refuses to classify. <br/><span style="color:red;">Withdrawn after failing every known safety standard.</span>'
+    price: 16.99
+    image: undefined.jpg
+    keywordsForPastebinDataLeakChallenge:
+      - hueteroneel
+      - eurogium edule
+  -
+    name: 'First-Run Toxic Bar Decal'
+    description: 'Original die-cut bar decal from before the district got fenced off. Rare collector junk. <em>Out of stock!</em>'
+    price: 999.99
+    image: sticker.png
+    deletedDate: '2017-04-28'
+  -
+    name: 'Faction Patches — Heat Transfer / 16pcs'
+    description: 'Sixteen heat-transfer marks for jackets, armour liners and clothes that need to look more suspicious.'
+    price: 14.99
+    image: iron-on.jpg
+  -
+    name: 'Scrapyard Magnets / 16pcs'
+    description: 'Sixteen Toxic Bar magnets strong enough for lockers, fridges and the side panel of an illegally modified vending machine.'
+    price: 15.99
+    image: magnets.jpg
+  -
+    name: 'Street Marking Sheet'
+    description: 'Sixteen stickers for terminals, cases, helmets and surfaces the municipal authority would prefer to remain clean.'
+    price: 9.99
+    image: sticker_page.jpg
+  -
+    name: 'Toxic Warning Decal'
+    description: 'Industrial-grade vinyl branding for laptops, field terminals and equipment that should probably carry a warning anyway.'
+    price: 4.99
+    image: sticker_single.jpg
+  -
+    name: 'Temporary Gang Marks / 16pcs'
+    description: 'Temporary skin marks for people who want faction credibility without the lifelong consequences.'
+    price: 14.99
+    image: tattoo.jpg
+    reviews:
+      - { text: 'I straight-up gots nuff props fo''these tattoos!', author: rapper }
+  -
+    name: 'Bunker Mug'
+    description: 'Black ceramic drinking vessel. Survives bad coffee, worse decisions and most non-ballistic workplace incidents.'
+    price: 21.99
+    image: fan_mug.jpg
+  -
+    name: 'Night Shift Hoodie'
+    description: 'Black, anonymous and warm enough for unheated server rooms. Toxic Bar insignia included. Identity not included.'
+    price: 49.99
+    image: fan_hoodie.jpg
+  -
+    name: 'Toxic Unit Velcro Patch'
+    description: 'Embroidered patch with hook-and-loop backing for tactical bags, scavenger packs and suspiciously overprepared commuters.'
+    price: 2.92
+    quantity: 5
+    limitPerUser: 5
+    image: velcro-patch.jpg
+    reviews:
+      - { text: 'This thang would look phat on Bobby''s jacked fur coat!', author: rapper }
+      - { text: 'Looks so much better on my uniform than the boring Starfleet symbol.', author: jim }
+  -
+    name: 'RAD-GREEN Concentrate'
+    description: 'Neon woodruff syrup from the old Black Forest zone. Do not drink undiluted unless permanent green tongue is part of your build.'
+    price: 6.99
+    image: woodruff_syrup.jpg
+  -
+    name: 'Mutant Green'
+    description: 'Cabbage, spinach, kiwi and grass blended into something that looks lethal and is, disappointingly, nutritious.'
+    price: 1.99
+    image: green_smoothie.jpg
+    reviews:
+      - { text: 'Fresh out of a replicator.', author: jim }
+  -
+    name: 'Quince Quarantine / 1L'
+    description: 'Dry, tart quince extract from a certified clean grow zone. Vitamin C content: high. Cheerfulness: negligible.'
+    price: 4.99
+    image: quince.jpg
+  -
+    name: 'Apple Reactor Sludge'
+    description: 'What remains after the good part has been extracted. May contain apple skin, seeds, worms and several excellent excuses for recycling it.'
+    price: 0.89
+    limitPerUser: 5
+    image: apple_pressings.jpg
+  -
+    name: 'Biomass Extraction Unit'
+    description: 'Organic matter goes in. Liquid comes out. Everything else becomes somebody else''s recycling problem.'
+    price: 89.99
+    image: fruit_press.jpg
+  -
+    name: 'Toxic Bar Relic — Printed Polymer'
+    description: 'A needlessly expensive 3D-printed bar relic with no practical function. Exactly the kind of artifact collectors kill resale value over.'
+    price: 99.99
+    image: 3d_keychain.jpg # Exif metadata contains "OpenSCAD" as subtle hint...
+    fileForRetrieveBlueprintChallenge: JuiceShop.stl # ...to blueprint file type
+    exifForBlueprintChallenge:
+      - OpenSCAD
+  -
+    name: 'Chromatic Spill #01'
+    description: 'One-off wasteland expressionism painted with beverage concentrate on lined paper. Archival quality was not a priority.'
+    price: 278.74
+    quantity: 0
+    image: artwork.jpg
+    deletedDate: '2020-12-24'
+  -
+    name: 'Old Network Merit Token — 2017'
+    description: 'A ceremonial nomination token from an organisation that still believed deadlines would matter after the collapse.'
+    price: 0.03
+    image: waspy.png
+    deletedDate: '2017-07-01'
+  -
+    name: 'Redline — Strawberry / 500ml'
+    description: 'Sweet strawberry mix with a bright red finish. Popular with couriers who insist sleep is an outdated protocol.'
+    price: 3.99
+    image: strawberry_juice.jpeg
+  -
+    name: 'Night Vision — Carrot / 1L'
+    description: 'Orange root extract marketed as optical enhancement. No rabbit has filed a complaint.'
+    price: 2.99
+    image: carrot_juice.jpeg
+    reviews:
+      - { text: '0 st4rs f0r 7h3 h0rr1bl3 s3cur17y', author: uvogin }
+  -
+    name: 'Northern Zone Decal Pack — 2017'
+    description: 'Ten sheets of old northern-zone markings. Fifteen decals per sheet. Mostly harmless unless applied to government property.'
+    price: 19.1
+    image: stickersheet_se.png
+    deletedDate: '2017-09-20'
+  -
+    name: 'Toxic Bar Field Manual'
+    description: 'An unofficial-looking official survival manual covering the systems, mistakes and hidden doors behind the bar.'
+    price: 5.99
+    image: cover_small.jpg
+    reviews:
+      - { text: 'Even more interesting than watching Interdimensional Cable!', author: morty }
+  -
+    name: 'Melon Runner Mk II'
+    description: 'A courier bike with wheels made from actual watermelons. Bad engineering survived the apocalypse too.'
+    price: 2999
+    quantity: 3
+    limitPerUser: 1
+    image: melon_bike.jpeg
+  -
+    name: 'Decontamination Pads / 10pcs'
+    description: 'Ten heavy-duty drink coasters for containing condensation, spills and beverages with uncertain regulatory status.'
+    price: 19.99
+    quantity: 0
+    image: coaster.jpg
+  -
+    name: 'Firewalls & Backdoors — Web Edition'
+    description: 'A tabletop relic about climbing through systems and falling through security holes. Allegedly educational.'
+    price: 0.01
+    quantity: 8
+    image: snakes_ladders.jpg
+    reviews:
+      - { text: 'Wait for a 10$ Steam sale of Tabletop Simulator!', author: bjoernOwasp }
+  -
+    name: 'Firewalls & Backdoors — Mobile Edition'
+    description: 'The pocket-network edition. Same bad decisions, smaller screens, more permissions nobody reads.'
+    price: 0.01
+    quantity: 0
+    image: snakes_ladders_m.jpg
+    reviews:
+      - { text: "Here yo' learn how tha fuck ta not show yo' goddamn phone on camera!", author: rapper }
+  -
+    name: 'Holo-Toxic Decal'
+    description: 'Holographic bar insignia with enough retro-future glare to confuse cameras and attract exactly the wrong kind of attention.'
+    price: 2.00
+    quantity: 0
+    image: holo_sticker.png
+    reviews:
+      - { text: "Rad, dude!", author: rapper }
+      - { text: "Looks spacy on Bones' new tricorder!", author: jim }
+      - { text: "Will put one on the Planet Express ship's bumper!", author: bender }
+  -
+    name: 'Street Filter Mask'
+    description: 'Cotton-polyester face covering with filter compartment. Rated for dust, bad air and dramatic entrances. Not rated for actual apocalypse.'
+    price: 13.49
+    quantity: 0
+    limitPerUser: 1
+    image: fan_facemask.jpg
+    reviews:
+      - { text: "K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!", author: uvogin }
+      - { text: "Puny mask for puny human weaklings!", author: bender }
+  -
+    name: 'Toxic Bar Adversary Card — Common'
+    description: 'Common-grade adversary card from a pre-collapse collectible game. Cheap, plentiful and probably still overvalued.'
+    price: 2.99
+    deluxePrice: 0.99
+    deletedDate: '2020-11-30'
+    limitPerUser: 5
+    image: ccg_common.png
+    reviews:
+      - { text: "Ooooh, puny human playing Mau Mau, now?", author: bender }
+  -
+    name: 'Toxic Bar Adversary Card — Black Foil'
+    description: 'Black-market holographic adversary card. Extremely rare, absurdly expensive and completely useless in a gunfight.'
+    price: 99.99
+    deluxePrice: 69.99
+    deletedDate: '2020-11-30'
+    quantity: 2
+    limitPerUser: 1
+    image: ccg_foil.png
+    reviews:
+      - { text: "Mau Mau with bling-bling? Humans are so pathetic!", author: bender }
+  -
+    name: 'Permafrost Archive — 2020'
+    description: 'A frozen snapshot preserved for a thousand years in the far north. Future archaeologists may conclude this was important.'
+    price: 9999.99
+    quantity: 1
+    limitPerUser: 1
+    image: permafrost.jpg
+    reviews:
+      - { text: "🧊 Let it go, let it go 🎶 Can't hold it back anymore 🎶 Let it go, let it go 🎶 Turn away and slam the door ❄️", author: rapper }
+  -
+    name: 'Portrait of a Black-Market Salesman'
+    description: 'Digital portrait of Stan, veteran dealer in used ships, coffins, real estate, restaurant salvage, questionable insulation and anything else with a negotiable history.'
+    price: 5000
+    quantity: 1
+    image: artwork2.jpg
+    reviews:
+      - { text: "I'd stand on my head to make you a deal for this piece of art.", author: stan }
+      - { text: "Just when my opinion of humans couldn't get any lower, along comes Stan...", author: bender }
+  -
+    name: 'Toxic Bar Alpha Card'
+    description: 'Mythic-grade first printing with three allegedly useful abilities. Mint condition. Keep sleeved, sealed and away from people who actually play cards.'
+    price: 1000
+    quantity: 3
+    limitPerUser: 1
+    image: card_alpha.jpg
+    reviews:
+      - { text: 'DO NOT PLAY WITH THIS! Double-sleeve, then put it in the GitHub Arctic Vault for perfect preservation and boost of secondary market value!', author: accountant }
+  -
+    name: 'Founders'' Night Access Token'
+    description: 'Legacy access token for a long-finished network gathering. Worth almost nothing except to archivists and people who refuse to delete calendar invites.'
+    price: 0.00000000000000000001
+    deletedDate: '2021-09-25'
+    limitPerUser: 1
+    image: 20th.jpeg
+    reviews:
+      - { text: "I'll be there! Will you, too?", author: bjoernOwasp }
+  -
+    name: 'Micro-Node Tower'
+    description: 'Modular plastic rack for four Raspberry Pi nodes, PoE hardware and a tiny cluster with ambitions far larger than its cooling budget.'
+    price: 799
+    quantity: 3
+    limitPerUser: 1
+    image: lego_case.jpg
+    reviews:
+      - { text: 'Check out the /#/photo-wall for some impressions of the assembly process!', author: bjoernOwasp }
+  -
+    name: 'Sector Conference Pass — 2024'
+    description: 'Expired access credential for a security gathering in the western territories. Catering was reportedly real.'
+    price: 55.20
+    deletedDate: '2024-09-26'
+    limitPerUser: 1
+    image: user_day_ticket.png
+    reviews:
+      - { text: 'The DSOMM Live Assessment session will even use Hackni vlastní web as its "real-world" example!', author: timo }
+      - { text: 'We will showcase the amazing MultiJuicer Lego Tower at this event!', author: jannik }
+  -
+    name: 'Solar Flare — Pineapple / 1L'
+    description: 'Tropical pineapple concentrate from sun-blasted greenhouse farms. Bright, sweet and suspiciously cheerful.'
+    price: 2.99
+    image: pineapple_juice.png
+  -
+    name: 'Coolant Green — Melon / 1L'
+    description: 'Cold melon blend engineered for hot machinery, hotter streets and operators who forgot to hydrate.'
+    price: 2.49
+    image: melon_juice.png
+  -
+    name: 'Blackout — Grape / 1L'
+    description: 'Deep-purple grape concentrate. Antioxidants included. Memories of last night sold separately.'
+    price: 2.99
+    image: grape_juice.png
+  -
+    name: 'Neon Dragon / 500ml'
+    description: 'Vivid dragonfruit extract glowing with entirely legal colour compounds. Probably.'
+    price: 3.99
+    image: dragonfruit_juice.png
+  -
+    name: 'Fallout Berry Mix / 1L'
+    description: 'A dark blend of forest berries harvested beyond the perimeter. Geiger counter not included.'
+    price: 3.49
+    image: berry_juice.png
+  -
+    name: 'Green Protocol'
+    description: 'Fresh basil and ginger blended into an aggressively functional green ration. Tastes healthier than the district air.'
+    price: 2.99
+    image: basil_smoothie.png
+    reviews:
+      - { text: "(ง'̀-'́)ง", author: basil }
+  -
+    name: 'Balkan Ferment / 500ml'
+    description: 'Old-world fermented millet drink. Sweet, sour, mildly energizing and still produced despite three regime changes.'
+    price: 2.49
+    image: braga.jpg
+  -
+    name: 'Ghostflower Cordial / 500ml'
+    description: 'Fragrant elderflower cordial best served cold. Delicate enough to make you briefly forget where you are.'
+    price: 3.29
+    image: elderflower_cordial.jpg
+  -
+    name: 'Orange Hazard / 500ml'
+    description: 'Sea-buckthorn concentrate: violently orange, aggressively sour and loaded with enough vitamin C to qualify as medical optimism.'
+    price: 3.99
+    image: sea_buckthorn_juice.jpg
+  -
+    name: 'Blood Circuit / 500ml'
+    description: 'Sweet-tart pomegranate drink with deep crimson colour and the unsettling appearance of something that should stay inside a machine.'
+    price: 4.49
+    image: pomegranate_drink.jpg
+memories:
+  -
+    image: 'magn(et)ificent!-1571814229653.jpg'
+    caption: 'Magn(et)ificent!'
+    user: bjoernGoogle
+  -
+    image: 'my-rare-collectors-item!-[̲̅$̲̅(̲̅-͡°-͜ʖ-͡°̲̅)̲̅$̲̅]-1572603645543.jpg'
+    caption: 'My rare collectors item! [̲̅$̲̅(̲̅ ͡° ͜ʖ ͡°̲̅)̲̅$̲̅]'
+    user: bjoernGoogle
+  -
+    image: 'favorite-hiking-place.png'
+    caption: 'I love going hiking here...'
+    geoStalkingMetaSecurityQuestion: 14
+    geoStalkingMetaSecurityAnswer: 'Daniel Boone National Forest'
+  -
+    image: 'IMG_4253.jpg'
+    caption: 'My old workplace...'
+    geoStalkingVisualSecurityQuestion: 10
+    geoStalkingVisualSecurityAnswer: 'ITsec'
+  -
+    image: 'BeeHaven.png'
+    caption: 'Welcome to the Bee Haven (/#/bee-haven)🐝'
+    user: evm
+  -
+    image: 'sorted-the-pieces,-starting-assembly-process-1721152307290.jpg'
+    caption: 'Sorted the pieces, starting assembly process...'
+    user: bjoernOwasp
+  -
+    image: 'building-something-literally-bottom-up-1721152342603.jpg'
+    caption: 'Building something literally bottom up...'
+    user: bjoernOwasp
+  -
+    image: 'putting-in-the-hardware-1721152366854.jpg'
+    caption: 'Putting in the hardware...'
+    user: bjoernOwasp
+  -
+    image: 'everything-up-and-running!-1721152385146.jpg'
+    caption: 'Everything up and running!'
+    user: bjoernOwasp
+ctf:
+  showFlagsInNotifications: false
+  showCountryDetailsInNotifications: none # Options: none  name  flag  both
+  countryMapping: ~
+  systemWideNotifications:
+    url: ~ # URL of an external endpoint returning { message, enabled, updatedAt }
+    pollFrequencySeconds: ~ # Required when url is set

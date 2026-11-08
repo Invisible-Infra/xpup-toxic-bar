@@ -1,0 +1,15 @@
+**/node_modules/
+**/build/
+**/dist/
+**/*.sqlite
+**/*.sqlite3
+**/*.db
+**/.env
+!/.env
+**/*.token
+**/*.pem
+**/*.key
+!fork/ctf.key
+!fork/encryptionkeys/premium.key
+fork/data/mailbox/
+fork/data/lab-uploads/

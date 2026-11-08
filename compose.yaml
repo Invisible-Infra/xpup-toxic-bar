@@ -1,0 +1,224 @@
+# Local XPUP Toxic Bar for one student (Linux, Windows, macOS).
+# Run from the cloned repository root: docker compose up -d --build
+# Independent of Netmaker, WireGuard, host scripts, VPS management and docker.sock.
+name: xpup-student-local
+
+x-restricted: &restricted
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
+services:
+  volume-init:
+    image: alpine:3.20
+    restart: "no"
+    network_mode: none
+    user: "0:0"
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        mkdir -p /vol/data /vol/mailbox /vol/uploads /vol/documents/public /vol/documents/private /vol/catalog
+        chown -R 65532:0 /vol/data /vol/mailbox /vol/uploads /vol/documents /vol/catalog
+        chmod 0750 /vol/data /vol/mailbox /vol/uploads /vol/documents /vol/catalog
+        chmod 0750 /vol/documents/public /vol/documents/private
+    volumes:
+      - student-data:/vol/data
+      - student-mailbox:/vol/mailbox
+      - student-uploads:/vol/uploads
+      - student-documents:/vol/documents
+      - student-catalog:/vol/catalog
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - FOWNER
+
+  app:
+    <<: *restricted
+    build:
+      context: ./fork
+      dockerfile: Dockerfile
+    image: xpup-student-local-app:dev
+    restart: unless-stopped
+    user: "65532:0"
+    environment:
+      XPUP_LAB: "1"
+      XPUP_INSTANCE_ID: student-local
+      XPUP_MAILBOX_DIR: /instance/mailbox
+      XPUP_UPLOADS_DIR: /instance/uploads
+      XPUP_DOCUMENTS_DIR: /instance/documents
+      XPUP_MANIFEST_DIR: /instance/data
+      XPUP_SQLITE_PATH: /instance/data/juiceshop.sqlite
+      XPUP_CATALOG_PATH: /instance/catalog/catalog.sqlite
+      XPUP_FETCH_WORKER_URL: http://fetch-worker:8090/fetch
+      XPUP_CATALOG_WORKER_URL: http://catalog-worker:8091/search
+      XPUP_PUBLIC_BASE: http://127.0.0.1:${XPUP_STUDENT_APP_PORT:-3000}
+      XPUP_COUPON_CODE: LAB20
+      XPUP_SHORT_TTL_EMAIL: t@lab.test
+      XPUP_SESSION_TTL: 60m
+      XPUP_PASSWORD_A: LabPasswordA15chars!
+      XPUP_PASSWORD_B: LabPasswordB15chars!
+      XPUP_PASSWORD_C: LabPasswordC15chars!
+      XPUP_PASSWORD_T: LabPasswordT15chars!
+      XPUP_PASSWORD_S: LabPasswordS15chars!
+      XPUP_PASSWORD_P: LabPasswordP15chars!
+      XPUP_PASSWORD_W: LabPasswordW15chars!
+      NODE_ENV: production
+    volumes:
+      - student-data:/instance/data
+      - student-mailbox:/instance/mailbox
+      - student-uploads:/instance/uploads
+      - student-documents:/instance/documents
+      - student-catalog:/instance/catalog
+    networks:
+      - lab_net
+    ports:
+      - "127.0.0.1:${XPUP_STUDENT_APP_PORT:-3000}:3000"
+    depends_on:
+      volume-init:
+        condition: service_completed_successfully
+      fetch-worker:
+        condition: service_started
+      catalog-worker:
+        condition: service_started
+      fixtures:
+        condition: service_started
+
+  catalog-worker:
+    <<: *restricted
+    build:
+      context: .
+      dockerfile: student/worker.Dockerfile
+      args:
+        WORKER_DIR: deploy/catalog-worker
+    image: xpup-student-local-catalog:dev
+    restart: unless-stopped
+    user: "65532:0"
+    read_only: true
+    tmpfs:
+      - /tmp
+    environment:
+      CATALOG_PATH: /catalog/catalog.sqlite
+      PORT: "8091"
+    volumes:
+      - student-catalog:/catalog:ro
+    networks:
+      - lab_net
+    depends_on:
+      volume-init:
+        condition: service_completed_successfully
+
+  fetch-worker:
+    <<: *restricted
+    build:
+      context: .
+      dockerfile: student/worker.Dockerfile
+      args:
+        WORKER_DIR: deploy/fetch-worker
+    image: xpup-student-local-fetch:dev
+    restart: unless-stopped
+    environment:
+      ALLOW_HOSTS: fixture-public,fixture-canary
+      MAX_BODY: "65536"
+      TIMEOUT_MS: "3000"
+      MAX_REDIRECTS: "1"
+    networks:
+      - lab_net
+
+  fixture-delay:
+    <<: *restricted
+    image: node:22-alpine
+    command: ["node", "-e", "require('http').createServer((q,s)=>setTimeout(()=>{s.writeHead(200);s.end('<title>slow</title>')},5000)).listen(8081)"]
+    networks:
+      - lab_net
+
+  fixtures:
+    build:
+      context: .
+      dockerfile: student/fixtures.Dockerfile
+    image: xpup-student-local-fixtures:dev
+    restart: unless-stopped
+    networks:
+      lab_net:
+        aliases: [fixture-public, fixture-canary]
+    security_opt:
+      - no-new-privileges:true
+
+  # Only the instructor invokes this one-shot L3 fixture explicitly.
+  instructor-role:
+    <<: *restricted
+    profiles: [instructor]
+    image: xpup-student-local-app:dev
+    user: "65532:0"
+    network_mode: none
+    entrypoint: ["/nodejs/bin/node", "/juice-shop/build/lab/instructorRole.js"]
+    environment:
+      XPUP_SQLITE_PATH: /instance/data/juiceshop.sqlite
+    volumes:
+      - student-data:/instance/data
+
+  # Read-only local recovery mailbox; no host Docker socket.
+  mailbox:
+    <<: *restricted
+    build:
+      context: ./student/mailbox
+      dockerfile: Dockerfile
+    image: xpup-student-local-mailbox:dev
+    user: "65532:0"
+    read_only: true
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      APP_URL: http://127.0.0.1:${XPUP_STUDENT_APP_PORT:-3000}
+    volumes:
+      - student-mailbox:/mailbox:ro
+    ports:
+      - "127.0.0.1:${XPUP_STUDENT_MAILBOX_PORT:-3080}:8080"
+    networks:
+      - lab_net
+    depends_on:
+      volume-init:
+        condition: service_completed_successfully
+
+  # Instructor/operator QA only. Not started by student docker compose up.
+  acceptance:
+    profiles: [qa]
+    build:
+      context: ./student/qa
+      dockerfile: Dockerfile
+    image: xpup-student-local-qa:dev
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      APP_URL: http://app:3000
+      MAIL_URL: http://mailbox:8080
+    volumes:
+      - qa-state:/qa-state
+    networks:
+      - lab_net
+    depends_on:
+      app:
+        condition: service_started
+      mailbox:
+        condition: service_started
+
+volumes:
+  student-data:
+  student-mailbox:
+  student-uploads:
+  student-documents:
+  student-catalog:
+  qa-state:
+
+networks:
+  lab_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+      com.docker.network.bridge.enable_icc: "true"

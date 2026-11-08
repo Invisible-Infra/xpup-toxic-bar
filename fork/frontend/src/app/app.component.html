@@ -1,0 +1,27 @@
+<!--
+  ~ Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
+  ~ SPDX-License-Identifier: MIT
+  -->
+
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #sidenav mode="over">
+    <sidenav (sidenavToggle)="sidenav.toggle()"></sidenav>
+  </mat-sidenav>
+  <app-navbar (sidenavToggle)="sidenav.toggle()"></app-navbar>
+  <app-server-started-notification></app-server-started-notification>
+  <app-ctf-system-wide-notification></app-ctf-system-wide-notification>
+  <app-challenge-solved-notification></app-challenge-solved-notification>
+  <app-welcome></app-welcome>
+  <div class="xpup-page">
+    <router-outlet></router-outlet>
+  </div>
+  <footer class="xpup-organizer-footer">
+    <a href="https://www.digitalnisebeobrana.cz" target="_blank" rel="noopener noreferrer"
+       aria-label="Digitální sebeobrana — oficiální web">
+      <img src="assets/public/images/digitalni-sebeobrana-logo.png"
+           alt="Digitální sebeobrana"
+           class="xpup-organizer-logo">
+      <span class="xpup-organizer-url">www.digitalnisebeobrana.cz</span>
+    </a>
+  </footer>
+</mat-sidenav-container>
