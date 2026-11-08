@@ -15,7 +15,7 @@
 
 ```text
 git clone https://github.com/Invisible-Infra/xpup-toxic-bar.git
-cd xpup-cursor-pack
+cd xpup-toxic-bar
 docker compose up -d --build
 ```
 
@@ -249,7 +249,7 @@ PowerShell na Windows, Terminal na macOS nebo terminál na Linuxu.
 
    ```sh
    git clone https://github.com/Invisible-Infra/xpup-toxic-bar.git
-   cd xpup-cursor-pack
+   cd xpup-toxic-bar
    ```
 
    Pokud GitHub požádá o přihlášení, použij svůj GitHub účet s přístupem
