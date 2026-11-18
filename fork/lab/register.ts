@@ -76,13 +76,8 @@ export function mountLabRoutes (app: Application) {
 
   // Support orders
   app.post('/rest/support/orders/:orderId/refund', security.isAuthorized(), utils.asyncHandler(supportOrders.refundOrder()))
-  // L4-04: deliberately vulnerable JWT claim trust, only inside an isolated XPUP lab.
-  // Outside XPUP_LAB retain the original signed-token and DB-role checks.
-  if (process.env.XPUP_LAB === '1') {
-    app.get('/rest/support/orders/audit', utils.asyncHandler(supportOrders.staffAuditJwtVulnerable()))
-  } else {
-    app.get('/rest/support/orders/audit', security.isAuthorized(), utils.asyncHandler(supportOrders.staffAudit()))
-  }
+  // Internal audit remains authenticated and role-gated; not the L4 JWT exercise.
+  app.get('/rest/support/orders/audit', security.isAuthorized(), utils.asyncHandler(supportOrders.staffAudit()))
 
   // Tickets
   app.post('/rest/support/tickets', security.isAuthorized(), utils.asyncHandler(tickets.createTicket()))
@@ -106,7 +101,13 @@ export function mountLabRoutes (app: Application) {
   // Checkout L9
   app.post('/rest/lab/coupon', security.isAuthorized(), utils.asyncHandler(checkout.applyLabCoupon()))
   app.post('/rest/checkout/quote', security.isAuthorized(), utils.asyncHandler(checkout.checkoutQuote()))
-  app.get('/rest/lab/orders', security.isAuthorized(), utils.asyncHandler(checkout.listOrders()))
+  // L4-04: the genuine UI orders GET is intentionally vulnerable only in the isolated lab.
+  // Other routes keep the existing signed-token/session middleware.
+  if (process.env.XPUP_LAB === '1') {
+    app.get('/rest/lab/orders', utils.asyncHandler(checkout.listOrdersJwtVulnerable()))
+  } else {
+    app.get('/rest/lab/orders', security.isAuthorized(), utils.asyncHandler(checkout.listOrders()))
+  }
   app.post('/rest/lab/orders', security.isAuthorized(), utils.asyncHandler(checkout.createPreparedOrder()))
   app.post('/rest/orders/:id/pay-wallet', security.isAuthorized(), utils.asyncHandler(checkout.payWallet()))
   app.post('/rest/orders/:id/confirm', security.isAuthorized(), utils.asyncHandler(checkout.confirmOrder()))

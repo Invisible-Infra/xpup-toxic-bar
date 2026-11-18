@@ -11,6 +11,8 @@ import { AddressModel } from '../../models/address'
 import { DeliveryModel } from '../../models/delivery'
 import { QuantityModel } from '../../models/quantity'
 import * as security from '../../lib/insecurity'
+import * as utils from '../../lib/utils'
+import { acceptLabSession } from '../session'
 
 const LAB_COUPON = process.env.XPUP_COUPON_CODE ?? 'LAB20'
 const COUPON_AMOUNT = 20
@@ -279,6 +281,59 @@ export function listOrders () {
       const staff = dbUser?.role === 'support' || dbUser?.role === 'accounting'
       const orders = await LabOrder.findAll({
         where: staff ? {} : { UserId: user.data.id },
+        order: [['id', 'DESC']]
+      })
+      res.json({ status: 'success', data: orders })
+    } catch (err) {
+      next(err)
+    }
+  }
+}
+
+
+/**
+ * XPUP L4-04: deliberately broken JWT role authorization on the EXISTING
+ * GET /rest/lab/orders used by both customer orders and the staff "Vratky" UI.
+ *
+ * Ordinary customers are still authenticated with a signed, persisted session
+ * and can only see their own orders. Staff role claims, however, are trusted
+ * straight from the decoded JWT WITHOUT verifying its signature or session.
+ * This insecure branch is mounted only when XPUP_LAB=1.
+ */
+export function listOrdersJwtVulnerable () {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const token = utils.jwtFrom(req)
+      let claims: any
+      try {
+        claims = security.decode(token)
+      } catch {
+        claims = undefined
+      }
+
+      // Intentional L4-only vulnerability: no signature, expiry, or session check.
+      const claimedStaff = claims?.data?.id &&
+        (claims.data.role === 'support' || claims.data.role === 'accounting')
+      if (claimedStaff) {
+        const orders = await LabOrder.findAll({ order: [['id', 'DESC']] })
+        res.json({ status: 'success', data: orders })
+        return
+      }
+
+      // The normal customer path must retain valid JWT and persisted session checks.
+      const session = await acceptLabSession(token)
+      if (!session?.data?.id) {
+        res.status(401).json({ status: 'error', message: 'unauthorized' })
+        return
+      }
+      const dbUser = await UserModel.findByPk(session.data.id)
+      if (!dbUser) {
+        res.status(401).json({ status: 'error', message: 'unauthorized' })
+        return
+      }
+      const isStaff = dbUser.role === 'support' || dbUser.role === 'accounting'
+      const orders = await LabOrder.findAll({
+        where: isStaff ? {} : { UserId: session.data.id },
         order: [['id', 'DESC']]
       })
       res.json({ status: 'success', data: orders })
