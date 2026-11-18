@@ -69,3 +69,41 @@ export function staffAudit () {
     }
   }
 }
+
+/**
+ * XPUP-LAB L4-04: intentionally broken JWT role authorization.
+ *
+ * The student should first get HTTP 403 with a genuine customer token, then
+ * change data.role to "support" in its JWT payload WITHOUT resigning the JWT.
+ * This handler trusts those claims without checking the signature or the
+ * persisted session. Keep it scoped to XPUP_LAB=1 in lab/register.ts.
+ *
+ * Do not use for non-lab routes: staffAudit() above is the secure contrast.
+ */
+export function staffAuditJwtVulnerable () {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      let claims: any
+      try {
+        claims = security.decode(utils.jwtFrom(req))
+      } catch {
+        claims = undefined
+      }
+      if (!claims?.data?.id) {
+        res.status(401).json({ status: 'error', message: 'unauthorized' })
+        return
+      }
+      const role = claims.data.role
+      if (role !== 'support' && role !== 'accounting') {
+        res.status(403).json({ status: 'error', message: 'forbidden' })
+        return
+      }
+      const orders = await LabOrder.findAll({
+        attributes: ['publicId', 'UserId', 'status', 'total', 'paidAmount', 'refunded']
+      })
+      res.json({ status: 'success', data: orders })
+    } catch (err) {
+      next(err)
+    }
+  }
+}

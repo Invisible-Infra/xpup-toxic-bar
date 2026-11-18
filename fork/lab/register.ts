@@ -76,7 +76,13 @@ export function mountLabRoutes (app: Application) {
 
   // Support orders
   app.post('/rest/support/orders/:orderId/refund', security.isAuthorized(), utils.asyncHandler(supportOrders.refundOrder()))
-  app.get('/rest/support/orders/audit', security.isAuthorized(), utils.asyncHandler(supportOrders.staffAudit()))
+  // L4-04: deliberately vulnerable JWT claim trust, only inside an isolated XPUP lab.
+  // Outside XPUP_LAB retain the original signed-token and DB-role checks.
+  if (process.env.XPUP_LAB === '1') {
+    app.get('/rest/support/orders/audit', utils.asyncHandler(supportOrders.staffAuditJwtVulnerable()))
+  } else {
+    app.get('/rest/support/orders/audit', security.isAuthorized(), utils.asyncHandler(supportOrders.staffAudit()))
+  }
 
   // Tickets
   app.post('/rest/support/tickets', security.isAuthorized(), utils.asyncHandler(tickets.createTicket()))
